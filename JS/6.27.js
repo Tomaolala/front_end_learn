@@ -39,7 +39,7 @@
                 } else {
                     dep--
                     return flat(item, prevRes, dep);
-
+                    
                 }
 
             } else {
