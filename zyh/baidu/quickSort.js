@@ -2,7 +2,7 @@ const arr = [1, 3, 235, 52, 545, 342, 32, 535, 45, 2]
 
 
 function quirckSort(arr, begin, end) {
-    if (begin < end) {
+    if (begin >=end) return 
         let i = begin,
             j = end
         let empty = arr[begin]
@@ -20,9 +20,7 @@ function quirckSort(arr, begin, end) {
 
         quirckSort(arr, begin, i - 1)
         quirckSort(arr, i + 1, end)
-    } else {
-        return
-    }
+
 
 
 }

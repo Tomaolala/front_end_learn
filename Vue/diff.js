@@ -102,7 +102,7 @@ function patch(newCh, oldCh) {
     }
 
 }
-
+    
 
 /**
  * 为什么不能用索引作为key
