@@ -29,8 +29,6 @@
         const startVal = initVal || [];
         return arr.reduce((prevRes, item) => {
             // 如果里层还是数组，递归调用自身
-
-
             if (Array.isArray(item)) {
 
                 if (dep === 0) {

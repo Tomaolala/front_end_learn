@@ -20,9 +20,6 @@ function quirckSort(arr, begin, end) {
 
         quirckSort(arr, begin, i - 1)
         quirckSort(arr, i + 1, end)
-
-
-
 }
 quirckSort(arr, 0, arr.length - 1)
 console.log(arr);
