@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+        
+    <meta charset="UTF-8" />
+        
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+       
+    <title>移动小鸟</title>
+    <style>
+      body {
+        margin: 0;
+        font-size: 0;
+        position: relative;
+        height: 100vh;
+      }
+
+      .bird {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        cursor: grab;
+        z-index: 10;
+      }
+    </style>
+  </head>
+
+  <body>
+    <img class="bird" alt="" />  
+  </body>
+
+  <script>
+    let evtName = getEventName();
+    // 鼠标指针相对于浏览器可视区域的偏移
+    let offsetX = 0,
+      offsetY = 0;
+    // 限制图片可以X和Y轴可以移动的最大范围，防止溢出
+    let limitX = 0,
+      limitY = 0;
+
+    // // 确保图片加载完
+    // window.onload = () => {
+    //   const bird = document.querySelector(".bird");
+    //   const { width, height } = bird;
+
+    //   limitX = document.documentElement.clientWidth - width;
+    //   limitY = document.documentElement.clientHeight - height;
+
+    //   bird.addEventListener(evtName.start, (event) => {
+    //     // 监听鼠标指针相对于可视窗口移动的距离
+    //     // 注意移动事件要绑定在document元素上，防止移动过快,位置丢失
+    //     document.addEventListener(evtName.move, moveAt);
+    //   });
+
+    //   // 鼠标指针停止移动时,释放document上绑定的移动事件
+    //   // 不然白白产生性能开销
+    //   document.addEventListener(evtName.end, () => {
+    //     document.removeEventListener(evtName.move, moveAt);
+    //   });
+
+    //   // 移动元素
+    //   function moveAt({ movementX, movementY }) {
+    //     const { offsetX, offsetY } = getSafeOffset({ movementX, movementY });
+
+    //     window.requestAnimationFrame(() => {
+    //       bird.style.cssText = `left:${offsetX}px;top:${offsetY}px;`;
+    //     });
+    //   }
+    // };
+
+    window.onload = () => {
+      const bird = document.querySelector(".bird");
+      const { width, height } = bird;
+      limitX = document.documentElement.clientWidth - width;
+      limitY = document.documentElement.clientHeight - height;
+
+      bird.addEventListener("pointerdown", () => {
+        document.addEventListener("pointermove", moveAt);
+      });
+      bird.addEventListener("pointerup", () => {
+        document.removeEventListener("pointermove", moveAt);
+      });
+
+      function moveAt({ movementX, movementY }) {
+        const { offsetX, offsetY } = getSafeOffset({ movementX, movementY });
+
+        window.requestAnimationFrame(() => {
+          bird.style.cssText = `left:${offsetX}px;top:${offsetY}px`;
+        });
+      }
+    };
+
+    // 获取安全的偏移距离
+    const getSafeOffset = ({ movementX, movementY }) => {
+      // //距上次鼠标位置的X,Y方向的偏移量
+      offsetX += movementX;
+      offsetY += movementY;
+
+      // 防止拖拽元素被甩出可视区域
+      if (offsetX > limitX) {
+        offsetX = limitX;
+      }
+
+      if (offsetX < 0) {
+        offsetX = 0;
+      }
+
+      if (offsetY > limitY) {
+        offsetY = limitY;
+      }
+
+      if (offsetY < 0) {
+        offsetY = 0;
+      }
+
+      // console.log({ movementX, movementY, offsetX, offsetY });
+      return { offsetX, offsetY };
+    };
+
+    // 区分是移动端还是PC端移动事件
+    function getEventName() {
+      if ("ontouchstart" in window) {
+        return {
+          start: "touchstart",
+          move: "touchmove",
+          end: "touchend",
+        };
+      } else {
+        return {
+          start: "pointerdown",
+          move: "pointermove",
+          end: "pointerup",
+        };
+      }
+    }
+  </script>
+</html>
