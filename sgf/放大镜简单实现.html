@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      #image {
+        width: 300px;
+        height: 300px;
+        background-color: #000;
+        background-image: url(https://placekitten.com/900/900);
+        background-size: 300px 300px;
+        background-repeat: no-repeat;
+      }
+
+      #image[zoomed] {
+        background-size: 900px 900px;
+        background-position: calc(var(--x) * 100%) calc(var(--y) * 100%);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="image"></div>
+    <script>
+      document
+        .querySelector("#image")
+        .addEventListener("mouseenter", enterHandler);
+      document
+        .querySelector("#image")
+        .addEventListener("mousemove", moveHandler);
+      document
+        .querySelector("#image")
+        .addEventListener("mouseleave", leaveHandler);
+
+      function enterHandler(e) {
+        e.target.setAttribute("zoomed", 1);
+        moveHandler(e);
+      }
+
+      function moveHandler(e) {
+        let rect = e.target.getBoundingClientRect();
+        let offsetX, offsetY;
+
+        offsetX = e.offsetX;
+        offsetY = e.offsetY;
+
+        let x = offsetX / rect.width;
+        let y = offsetY / rect.height;
+
+        e.target.style.setProperty("--x", x);
+        e.target.style.setProperty("--y", y);
+      }
+
+      function leaveHandler(e) {
+        e.target.removeAttribute("zoomed");
+        moveHandler(e);
+      }
+    </script>
+  </body>
+</html>
